@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.simpleboard.mapper.BoardMapper">
+    <sql id="search">
+        <where>
+            <if test="searchWord !=null and searchField == 'writer'">
+                writer like CONCAT ('%', #{searchWord}, '%')
+            </if>
+            <if test="searchWord !=null and searchField == 'title'">
+                title like CONCAT ('%', #{searchWord}, '%')
+            </if>
+        </where>
+    </sql>
+  <select id="findAll" resultType="org.example.simpleboard.dto.BoardDTO">
+     select * from boards
+      <include refid="search"></include>
+      order by num desc
+  </select>
+
+    <select id="count" resultType="int">
+        select count(*) from boards
+        <include refid="search"></include>
+    </select>
+</mapper>
